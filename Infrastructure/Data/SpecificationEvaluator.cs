@@ -7,7 +7,7 @@ namespace Infrastructure.Data
 {
     public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
-        public static IQueryable<TEntity> GetQueryable(IQueryable<TEntity> inputQuery, ISpecifications<TEntity> spec){
+        public static IQueryable<TEntity> GetQueryable(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec){
 
                  
                  var query = inputQuery;
@@ -17,6 +17,20 @@ namespace Infrastructure.Data
                      query = query.Where(spec.Criteria);
                      
                  }
+
+                if(spec.OrderBy != null){
+
+                     query = query.OrderBy(spec.OrderBy);
+                     
+                }
+                if(spec.OrderByDesc != null){
+
+                     query = query.OrderByDescending(spec.OrderByDesc);
+                }
+
+                if(spec.IsPaginationEnabled){
+                    query  = query.Skip(spec.Skip).Take(spec.Take);
+                }
 
                  query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
                  
