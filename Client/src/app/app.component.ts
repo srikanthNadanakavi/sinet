@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { IPagination } from './models/IPagination';
-import { IProduct } from './models/product';
+import { IPagination } from './shared/models/IPagination';
+import { IProduct } from './shared/models/product';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +11,7 @@ import { IProduct } from './models/product';
 export class AppComponent {
   title = 'Client';
   products: IProduct[];
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.http
-      .get('https://localhost:5001/api/products?pageSize=50')
-      .subscribe((response: IPagination) => {
-        // console.l;
-        console.log(response.data);
-        this.products = response.data;
-      });
-  }
+  ngOnInit(): void {}
 }
