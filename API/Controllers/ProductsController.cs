@@ -22,7 +22,9 @@ namespace API.Controllers
 
         //API Controller will do validation
         public ProductsController(IGenericRepository<Product> productRepo,
-        IGenericRepository<ProductBrand> productBrandRepo, IGenericRepository<ProductType> productTypeRepo, IMapper mapper)
+        IGenericRepository<ProductBrand> productBrandRepo, 
+        IGenericRepository<ProductType> productTypeRepo, 
+        IMapper mapper)
         {
             _mapper = mapper;
             _productRepo = productRepo;

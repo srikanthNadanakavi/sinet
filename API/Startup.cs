@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -26,6 +27,11 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IConnectionMultiplexer>(x => {
+                var confuguration = ConfigurationOptions.Parse(_config.GetConnectionString("Radis"),true);
+                return ConnectionMultiplexer.Connect(confuguration);
+            });
             
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
