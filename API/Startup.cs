@@ -2,12 +2,12 @@ using API.Extentions;
 using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
 namespace API
@@ -27,12 +27,15 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
-
+            services.AddDbContext<AppIdentityDbContext>( x => {
+               x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+            });
             services.AddSingleton<IConnectionMultiplexer>(x => {
                 var confuguration = ConfigurationOptions.Parse(_config.GetConnectionString("Radis"),true);
                 return ConnectionMultiplexer.Connect(confuguration);
             });
             
+            services.AddIdentityServices(_config);
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
 
@@ -62,6 +65,7 @@ namespace API
 
             app.UseCors("CorsPolicy");
 
+            app.UseAuthentication(); 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

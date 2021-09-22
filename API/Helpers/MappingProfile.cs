@@ -1,6 +1,7 @@
 using API.Dtos;
 using AutoMapper;
 using Core.Entities;
+using Core.Entities.Identity;
 
 namespace API.Helpers
 {
@@ -12,6 +13,8 @@ namespace API.Helpers
             .ForMember(dest => dest.ProductBrand , src => src.MapFrom( s => s.ProductBrand.Name))
             .ForMember(dest => dest.ProductType , src => src.MapFrom( s => s.ProductType.Name))
             .ForMember(dest => dest.PictureUrl , src => src.MapFrom<ProductUrlResolver>());
+
+             CreateMap<Address,AddressDto>().ReverseMap();
         }
         
     }
