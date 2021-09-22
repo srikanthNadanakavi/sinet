@@ -79,8 +79,6 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-
-
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user == null) return Unauthorized(new ApiResponse(401));
@@ -102,6 +100,10 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(RegisterDto registerDto)
         {
 
+            if(CheckEmailExitsAsync(registerDto.Email).Result.Value){
+                return new BadRequestObjectResult(new ApivalidationErrorResponse{ Errors = new [] 
+                { "Email address ins in use"}});
+            }
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
