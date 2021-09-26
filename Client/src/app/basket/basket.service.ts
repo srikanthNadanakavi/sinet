@@ -33,8 +33,10 @@ export class BasketService {
   }
 
   setBasket(basket: IBasket) {
+    console.log('Final Basket', basket);
     return this.http.post(this.baseUrl + 'basket', basket).subscribe(
       (response: IBasket) => {
+        console.log('updated to baked', response);
         this.basketSource.next(basket);
         this.calculateTotals();
       },
@@ -104,6 +106,9 @@ export class BasketService {
     itemToAdd: IBasketItem,
     quantity: number
   ): IBasketItem[] {
+    console.log('Itens', items);
+    // console.log(itemToAdd);
+
     const index = items.findIndex((x) => x.id === itemToAdd.id);
     if (index === -1) {
       itemToAdd.quantity = quantity;
